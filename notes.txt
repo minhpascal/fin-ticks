@@ -1,0 +1,18 @@
+symbol, bid,ask,last trade price
+mark, market, symbol,shares
+
+Mazy@of.in:Ofin2015
+
+https://www.xignite.com/MyAccount/#/dashboard
+
+BATS exchanges
+Security: Company Name, Symbol
+Real time Quote: Bid, Ask, Bid quantity, Ask quantity, Last, Previous Close Date, Change, Percent Change, Open, High, Low, Close, Volume, Spread Datetime (local market)
+Bars: High trade, Low trade, Datetime, Average Price, Quantity
+
+
+system curl -u Mazy@openf.in:Openfin2015 http://batsrealtime.xignite.com/xBATSRealTime.json/GetRealQuotesByIdentifiers\\?IdentifierType\\=Symbol\\&Identifiers\\=MSFT,ORCL"
+
+
+
+"[{Outcome:Success,Message:null,Identity:IP,Delay:0.2028019,Symbol:MSFT,CompanyName:Microsoft Corp,Date:5/8/2015,Time:10:21:27 AM,Open:46.96,Close:0.0,PreviousClose:46.7,PreviousCloseDate:5/7/2015,High:47.98,Low:46.96,Last:47.605,Change:0.905,PercentChange:1.938,Volume:855620.0,Bid:47.6,Ask:47.61,Spread:0.01,BidQuantity:2012.0,AskQuantity:300.0,TradingHalted:false},{Outcome:Success,Message:null,Identity:null,Delay:0.0,Symbol:ORCL,CompanyName:Oracle Corp,Date:5/8/2015,Time:10:21:14 AM,Open:43.83,Close:0.0,PreviousClose:43.48,PreviousCloseDate:5/7/2015,High:44.24,Low:43.69,Last:43.93,Change:0.45,PercentChange:1.035,Volume:165655.0,Bid:43.93,Ask:43.94,Spread:0.01,BidQuantity:400.0,AskQuantity:600.0,TradingHalted:false}]"
