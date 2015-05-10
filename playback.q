@@ -1,5 +1,4 @@
 \p 5000
-\e 1
 \l stocks
 \l ticks
 \l hypergrid-support.q
