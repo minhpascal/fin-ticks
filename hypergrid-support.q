@@ -15,8 +15,6 @@ window:{[tableName;start;num]
     ii: start + til num;
     ([]row:ii),'(value tableName)[ii]}
 
-k).j.c: {$["{"=*x;(`$c'n#'x)!c'(1+n:x?'":")_'x:d x;"["=*x;.Q.fc[c']d x;q=*x;$[1<+/v x;'`err;"",. x];"a">*x;"F"$x;"n"=*x;0n;"t"=*x]}
-
 .z.ws:{
   LASTCLIENT:: .z.w;
   message: .j.c x;
