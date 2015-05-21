@@ -26,7 +26,13 @@ query:{[message]
  }
 
 fields:{[message]
-	message[`result]: (key meta ticks)`c;
+	message[`result]: asc (key meta ticks)`c;
+	json: .j.j message;
+	neg[.z.w] json;
+ }
+
+symbols:{[message]
+	message[`result]: asc exec distinct Symbol from ticks;
 	json: .j.j message;
 	neg[.z.w] json;
  }
@@ -43,8 +49,8 @@ fields:{[message]
     self.ws.send(JSON.stringify({
         cmd: 'query',
         data: {
-            	startTime: '2000-01-01:00:00:00Z',
-				endTime: '2015-05-22:00:00:00Z',
+            	startTime: '2000-01-01T00:00:00Z',
+				endTime: '2015-05-22T00:00:00Z',
 				records: 200,
 				interval: 1,
 				intervalUnit: 'm',
