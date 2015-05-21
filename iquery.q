@@ -4,20 +4,27 @@ ticks:-9!read1 `:ticks10;
 
 minutesOnly:{(`date$x) + (`minute$x)};
 
+asUTC:{(string x),"Z"};
+
 query:{[message]
+	validFields: asc (key meta ticks)`c;
 	map: message`data;
+	
 	startTime: map`startTime;
+	startTime: $[startTime~"";string "z"$0;startTime];
+
 	endTime: map`endTime;
+	endTime: $[endTime~"";string .z.Z;endTime];
+
 	records: map`records;
 	interval: map`interval;
 	intervalUnit: map`intervalUnit;
 	symbolList: `$map`symbolList;
-	fieldList: `$map`fieldList;
-
+	fieldList: (`$map`fieldList) inter validFields;
 	startTime: "Z"$(-1 _ startTime);
 	endTime: "Z"$(-1 _ endTime);
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
-	result: `DT`Symbol xasc update DT: "z"$ minutesOnly each DT from result;
+	result: `DT`Symbol xasc update DT: asUTC each "z"$ minutesOnly each DT from result;
 	result: update Close:Last from result;
 	result: ("i"$(records & count result)) # result;
 	result: ?[result;();0b;fieldList!fieldList];
@@ -55,8 +62,8 @@ symbols:{[message]
 				records: 200,
 				interval: 1,
 				intervalUnit: 'm',
-				symbolList: 'IBM,BAX,BAM',
-				fieldList: ''
+				symbolList: ['IBM','BAX','BAM'],
+				fieldList: ['IBM','BAX','BAM'],
         }
     }));
 };
