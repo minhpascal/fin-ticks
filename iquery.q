@@ -11,15 +11,16 @@ query:{[message]
 	records: map`records;
 	interval: map`interval;
 	intervalUnit: map`intervalUnit;
-	symbolList: ",",map`symbolList;
-	fieldList: map`fieldList;
+	symbolList: `$map`symbolList;
+	fieldList: `$map`fieldList;
 
 	startTime: "Z"$(-1 _ startTime);
 	endTime: "Z"$(-1 _ endTime);
-	symbolList: `$ $[count where symbolList=",";1 _' ((where symbolList=",") _ symbolList);1 _ symbolList];
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
 	result: `DT`Symbol xasc update DT: "z"$ minutesOnly each DT from result;
+	result: update Close:Last from result;
 	result: ("i"$(records & count result)) # result;
+	result: ?[result;();0b;fieldList!fieldList];
 	message[`result]: result;
 	json: .j.j message;
 	neg[.z.w] json;
