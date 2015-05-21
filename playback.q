@@ -5,7 +5,7 @@
 
 trade:(`$ssr[;" ";"_"]each string cols stocks)xcol stocks
 
-f:{t:`TICKER xcol select by Symbol from(x)where Outcome=`Success;
+f:{t:`TICKER xcol select by Symbol from(x);
  `trade set trade lj update PnL:Change*Volume*floor(-0.0001;0f;0.0001)@count[t]?3 from t;
   pushUpdates[]}
 
