@@ -20,7 +20,14 @@ query:{[message]
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
 	result: `DT`Symbol xasc update DT: "z"$ minutesOnly each DT from result;
 	result: ("i"$(records & count result)) # result;
-	json: .j.j result;
+	message[`result]: result;
+	json: .j.j message;
+	neg[.z.w] json;
+ }
+
+fields:{[message]
+	message[`result]: (key meta ticks)`c;
+	json: .j.j message;
 	neg[.z.w] json;
  }
 
