@@ -1,4 +1,5 @@
 \l stocks
+ticks:-9!read1 `:ticks10;
 
 parseTime:{
 	s:string x;
