@@ -14,11 +14,12 @@ query:"curl -u Mzy@opnf.in:Opnfin2015 http://batsrealtime.xignite.com/xBATSRealT
 
 ticks:-9!read1 `:ticks10;
 grp:-1+exec max Group from ticks;
+headers:`Group`Outcome`Message`Identity`Delay`Symbol`CompanyName`Date`Time`Open`Close`PreviousClose`PreviousCloseDate`High`Low`Last`Change`PercentChange`Volume`Bid`Ask`Spread`BidQuantity`AskQuantity`TradingHalted;
 
 //result:system query;
 //headers:`Group,`$"," vs result 0;
 //data:{{(x 0) $ (x 1)} each flip (("SSSFSSDSFFFDFFFFFIFFFIIS"); ("," vs x))} each (1 _ result);
-//ticks:flip (headers!(enlist ((count data)# grp+:1)), flip data);
+//ticks:flip (headers!(enlist ((count data)# grp+:1)), (flip data));
 //delete from `ticks where TradingHalted = `True;
 //delete Outcome,Message,Date,Time,Identity,Delay,TradingHalted from `ticks;
 //update DT:.z.Z from `ticks;
@@ -27,7 +28,7 @@ grp:-1+exec max Group from ticks;
 .z.ts:{
 	result:system query;
 	data:{{(x 0) $ (x 1)} each flip (("SSSFSSDSFFFDFFFFFIFFFIIS"); ("," vs x))} each (1 _ result);
-	data:flip (headers!(enlist ((count data)# grp+:1)), flip data);
+	data:flip (headers!(enlist ((count data)# grp+:1)), (flip data));
 
 	data:delete from data where TradingHalted = `True;
 	data:delete Outcome,Message,Date,Time,Identity,Delay,TradingHalted from data;
