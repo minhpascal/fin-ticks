@@ -9,7 +9,7 @@ asUTC:{(string x),"Z"};
 query:{[message]
 	validFields: asc (key meta ticks)`c;
 	map: message`data;
-	
+
 	startTime: map`startTime;
 	startTime: $[startTime~"";string "z"$0;startTime];
 
@@ -24,11 +24,11 @@ query:{[message]
 	startTime: "Z"$(-1 _ startTime);
 	endTime: "Z"$(-1 _ endTime);
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
-	result: `DT`Symbol xasc update DT: asUTC each "z"$ minutesOnly each DT from result;
+	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	result: update Close:Last from result;
 	result: ("i"$(records & count result)) # result;
-	result: ?[result;();0b;fieldList!fieldList];
-	message[`result]: result;
+	result: ?[result;();0b;(fieldList,`Date)!(fieldList,`Date)];
+	message[`result]: flip result;
 	json: .j.j message;
 	neg[.z.w] json;
  }
@@ -63,7 +63,7 @@ symbols:{[message]
 				interval: 1,
 				intervalUnit: 'm',
 				symbolList: ['IBM','BAX','BAM'],
-				fieldList: ['IBM','BAX','BAM'],
+				fieldList: [],
         }
     }));
 };
