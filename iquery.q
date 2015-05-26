@@ -7,7 +7,7 @@ ticks:-9!read1 `:ticks10;
 
 minutesOnly:{(`date$x) + (`minute$x)};
 
-asUTC:{r:(string timezoneOffset+x),"Z";r[(4;7)]:"-";r};
+asUTC:{r:(string neg[timezoneOffset]+x),"Z";r[(4;7)]:"-";r};
 
 query:{[message]
 	validFields: asc (key meta ticks)`c;
