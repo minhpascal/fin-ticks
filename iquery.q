@@ -26,7 +26,7 @@ query:{[message]
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
 	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	result: update Close:Last from result;
-	$[-7h~type records;records:5000;];
+	$[not -7h~type records;records:1000;];
 	result: neg[records] # result;
 	result: ?[result;();0b;(fieldList,`Date)!(fieldList,`Date)];
 	message[`result]: flip result;
