@@ -1,37 +1,38 @@
 \p 54321
 \e 1
+
+timezoneOffset:-04:00:00;
+
 ticks:-9!read1 `:ticks10;
 
 minutesOnly:{(`date$x) + (`minute$x)};
 
-asUTC:{r:(string x),"Z";r[(4;7)]:"-";r};
+asUTC:{r:(string timezoneOffset+x),"Z";r[(4;7)]:"-";r};
 
 query:{[message]
 	validFields: asc (key meta ticks)`c;
 	map: message`data;
-
 	startTime: map`startTime;
-	startTime: $[startTime~"";string "z"$0;startTime];
+	startTime: $[startTime~"";"z"$0;"Z"$(-1 _ startTime)];
 
 	endTime: map`endTime;
-	endTime: $[endTime~"";string .z.Z;endTime];
+	endTime: $[endTime~"";0Nz;"Z"$(-1 _ endTime)];
 
 	records: "i"$map`records;
 	interval: map`interval;
 	intervalUnit: map`intervalUnit;
 	symbolList: `$map`symbolList;
 	fieldList: (`$map`fieldList) inter validFields;
-	startTime: "Z"$(-1 _ startTime);
-	endTime: "Z"$(-1 _ endTime);
-	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
+	result: $[endTime~0Nz;select from ticks where Symbol in symbolList, DT > timezoneOffset+startTime;select from ticks where Symbol in symbolList, DT > timezoneOffset+startTime, DT < timezoneOffset+endTime];
 	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	result: update Close:Last from result;
-	$[not -7h~type records;records:1000;];
-	result: neg[records] # result;
+	$[not -7h~type records;records:5000;];
+	result: neg[records & count result] # result;
 	result: ?[result;();0b;(fieldList,`Date)!(fieldList,`Date)];
 	message[`result]: flip result;
 	json: .j.j message;
 	neg[.z.w] json;
+	-1 raze raze string (timezoneOffset+startTime;", ";timezoneOffset+endTime;", ";records;", ";count result);
  }
 
 fields:{[message]
