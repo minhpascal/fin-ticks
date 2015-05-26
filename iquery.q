@@ -16,7 +16,7 @@ query:{[message]
 	endTime: map`endTime;
 	endTime: $[endTime~"";string .z.Z;endTime];
 
-	records: map`records;
+	records: "i"$map`records;
 	interval: map`interval;
 	intervalUnit: map`intervalUnit;
 	symbolList: `$map`symbolList;
@@ -26,7 +26,7 @@ query:{[message]
 	result: select from ticks where Symbol in symbolList, DT > startTime, DT < endTime;
 	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	result: update Close:Last from result;
-	result: ("i"$(records & count result)) # result;
+	result: neg[records] # result;
 	result: ?[result;();0b;(fieldList,`Date)!(fieldList,`Date)];
 	message[`result]: flip result;
 	json: .j.j message;
