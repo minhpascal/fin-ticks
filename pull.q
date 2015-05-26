@@ -1,4 +1,5 @@
 \l stocks
+\t 60000
 ticks:-9!read1 `:ticks10;
 
 parseTime:{
@@ -40,6 +41,7 @@ headers:`Group`Outcome`Message`Identity`Delay`Symbol`CompanyName`Date`Time`Open`
 
 //600000 rows seems to yield files of under 100MB
 //requirement for github
+
 saveTicks: {
 	blockSize:600000;
 	times: ceiling (count ticks) % blockSize;
@@ -47,6 +49,5 @@ saveTicks: {
 	{(`$":ticks",(string (10 + (x 0)))) 1: -8!select from ticks where i > x 1, i < x 2} each cuts;
  }
 
-\t 60000
 
  /{select from (select by Group,Symbol from ticks where Group < 10, Symbol in `IBM`AOS`ATI) where i in x} each (9 3# til 27)
