@@ -1,9 +1,12 @@
 \p 54321
 \e 1
 
+//select Close:avg Close by p,minute from update minute:(DT.month+DT.minute), p:(first each string Symbol) in "ABCDEFGHIJKL" from ticks
+
 timezoneOffset:-04:00:00;
 
 ticks:-9!read1 `:ticks10;
+ticks,:-9!read1 `:ticks11;
 
 minutesOnly:{(`date$x) + (`minute$x)};
 

@@ -1,6 +1,7 @@
 \l stocks
 \t 60000
 ticks:-9!read1 `:ticks10;
+ticks,:-9!read1 `:ticks11;
 
 parseTime:{
 	s:string x;
@@ -8,6 +9,7 @@ parseTime:{
 	v:"V"$-3 _ string x;
 	$[m~"PM";v:v+12:00:00;];
  v}
+ 
 parseTimes:{
  {parseTime x} each x}
 

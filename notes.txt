@@ -11,7 +11,7 @@ Real time Quote: Bid, Ask, Bid quantity, Ask quantity, Last, Previous Close Date
 Bars: High trade, Low trade, Datetime, Average Price, Quantity
 
 
-system curl -u Mazy@openf.in:Openfin2015 http://batsrealtime.xignite.com/xBATSRealTime.json/GetRealQuotesByIdentifiers\\?IdentifierType\\=Symbol\\&Identifiers\\=MSFT,ORCL"
+system curl -u Mzy@opnf.in:Opnfin2015 http://batsrealtime.xignite.com/xBATSRealTime.json/GetRealQuotesByIdentifiers\\?IdentifierType\\=Symbol\\&Identifiers\\=MSFT,ORCL"
 
 
 
