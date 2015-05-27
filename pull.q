@@ -9,13 +9,12 @@ parseTime:{
 	v:"V"$-3 _ string x;
 	$[m~"PM";v:v+12:00:00;];
  v}
- 
+
 parseTimes:{
  {parseTime x} each x}
 
 query:"curl -u Mzy@opnf.in:Opnfin2015 http://batsrealtime.xignite.com/xBATSRealTime.csv/GetRealQuotesByIdentifiers\\?IdentifierType\\=Symbol\\&Identifiers\\=",1 _ raze {",",x} each string asc 1000 # exec TICKER from stocks;
 
-ticks:-9!read1 `:ticks10;
 grp:-1+exec max Group from ticks;
 headers:`Group`Outcome`Message`Identity`Delay`Symbol`CompanyName`Date`Time`Open`Close`PreviousClose`PreviousCloseDate`High`Low`Last`Change`PercentChange`Volume`Bid`Ask`Spread`BidQuantity`AskQuantity`TradingHalted;
 
