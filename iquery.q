@@ -3,6 +3,10 @@
 
 //select Close:avg Close by p,minute from update minute:(DT.month+DT.minute), p:(first each string Symbol) in "ABCDEFGHIJKL" from ticks
 
+portfolios:flip ((`$"P@0";`AA`BA`GM`KO`LUV);
+			(`$"P@1";`S`UTX`X`Y`YUM));
+portfolios:portfolios[0]!portfolios[1];
+
 timezoneOffset:-04:00:00;
 
 ticks:-9!read1 `:ticks10;
@@ -13,8 +17,14 @@ minutesOnly:{(`date$x) + (`minute$x)};
 asUTC:{r:(string neg[timezoneOffset]+x),"Z";r[(4;7)]:"-";r};
 
 query:{[message]
-	validFields: asc (key meta ticks)`c;
 	map: message`data;
+	
+	portfolio:`$first map`symbolList;
+	isPortfolio:portfolio in key portfolios;
+
+	$[isPortfolio;map[`symbolList]:portfolios[portfolio];];
+
+	validFields: asc (key meta ticks)`c;
 	startTime: map`startTime;
 	startTime: timezoneOffset + $[startTime~"";"z"$0;"Z"$(-1 _ startTime)];
 
@@ -25,14 +35,16 @@ query:{[message]
 	records:$[10h~type map`records;0Nf;records];
 	interval: map`interval;
 	intervalUnit: map`intervalUnit;
-	symbolList: `$map`symbolList;
+	symbolList: $[isPortfolio;`$string (map`symbolList);`$map`symbolList];
 	fieldList: (`$map`fieldList) inter validFields;
 	result: $[endTime~0Nz;select from ticks where Symbol in symbolList, DT > startTime;select from ticks where Symbol in symbolList, DT > startTime, DT < endTime];
 	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	records: $[records~0Nf;5000;records];
 	result: ("i"$neg[records & count result]) # result;
 	result: update Close:Last from result;
-	result: ?[result;();0b;(fieldList,`Date)!(fieldList,`Date)];
+	result: $[isPortfolio;
+		() xkey value (?;result;();(enlist `Date)!enlist `Date;fieldList!flip ((count fieldList) # avg;fieldList));
+		?[result;();0b;(fieldList,`Date)!(fieldList,`Date)]];
 	message[`result]: flip result;
 	json: .j.j message;
 	neg[.z.w] json;
