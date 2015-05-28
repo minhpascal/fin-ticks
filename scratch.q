@@ -1,4 +1,4 @@
-query:{[message]
+bars:{[message]
 
 	map: message`data;
 	
@@ -23,12 +23,13 @@ query:{[message]
 	result: $[endTime~0Nz;select from ticks where Symbol in symbolList, DT > startTime;select from ticks where Symbol in symbolList, DT > startTime, DT < endTime];
 	result: `Date`Symbol xasc update Date: asUTC each "z"$ minutesOnly each DT from result;
 	result: $[isPortfolio;
-		() xkey value (?;result;();(`Date`Last)!(`Date`Last);fieldList!flip ((count fieldList) # avg;fieldList));
+		() xkey value (?;result;();(enlist `Date)!(enlist `Date);(fieldList,`Last)!flip ((1+count fieldList) # avg;(fieldList,`Last)));
 		?[result;();0b;(fieldList,`Date,`Last)!(fieldList,`Date,`Last)]];
-	Q;
+	result: ()xkey select by Date from result;
 	records: $[records~0Nf;5000;records];
 	result: ("i"$neg[records & count result]) # result;
 	result: update Close:Last from result;
+	Q;
 
 	message[`result]: flip result;
 	json: .j.j message;

@@ -3,11 +3,8 @@
 
 //select Close:avg Close by p,minute from update minute:(DT.month+DT.minute), p:(first each string Symbol) in "ABCDEFGHIJKL" from ticks
 
-//portfolios:flip ((`$"P@0";`BA`KO`LUV);
-//			(`$"P@1";`S`UTX`X`Y`YUM));
-
-portfolios:flip ((`$"P@0";`BA`GM`KO`LUV);
-			(`$"P@1";`S));
+portfolios:flip ((`$"P@0";`AA`BA`GM`KO`LUV);
+			(`$"P@1";`S`UTX`X`Y`YUM));
 
 portfolios:portfolios[0]!portfolios[1];
 
@@ -21,7 +18,7 @@ minutesOnly:{(`date$x) + (`minute$x)};
 
 asUTC:{r:(string neg[timezoneOffset]+x),"Z";r[(4;7)]:"-";r};
 
-query:{[message]
+bars:{[message]
 
 	map: message`data;
 	
@@ -48,6 +45,7 @@ query:{[message]
 	result: $[isPortfolio;
 		() xkey value (?;result;();(enlist `Date)!(enlist `Date);(fieldList,`Last)!flip ((1+count fieldList) # avg;(fieldList,`Last)));
 		?[result;();0b;(fieldList,`Date,`Last)!(fieldList,`Date,`Last)]];
+	result: ()xkey select by Date from result;
 	records: $[records~0Nf;5000;records];
 	result: ("i"$neg[records & count result]) # result;
 	result: update Close:Last from result;
@@ -56,6 +54,15 @@ query:{[message]
 	json: .j.j message;
 	neg[.z.w] json;
 	-1 raze raze string (startTime;", ";endTime;", ";records;", ";count result;", ";map`querystring);
+ }
+
+components:{[message]
+	map: message`data;
+	security: `$map`security;
+	list: portfolios[security];
+	message[`result]: list;
+	json: .j.j message;
+	neg[.z.w] json;
  }
 
 fields:{[message]
