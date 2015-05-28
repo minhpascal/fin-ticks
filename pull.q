@@ -2,6 +2,7 @@
 \t 60000
 ticks:-9!read1 `:ticks10;
 ticks,:-9!read1 `:ticks11;
+ticks,:-9!read1 `:ticks12;
 
 parseTime:{
 	s:string x;
